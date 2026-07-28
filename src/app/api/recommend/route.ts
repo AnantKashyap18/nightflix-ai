@@ -49,9 +49,17 @@ Return this format:
       temperature: 0.8,
     });
 
-    return NextResponse.json({
-      recommendations: response.choices[0].message.content,
-    });
+    const content = response.choices[0].message.content;
+
+if (!content) {
+  throw new Error("No response from OpenAI");
+}
+
+const recommendations = JSON.parse(content);
+
+return NextResponse.json({
+  recommendations,
+});
   } catch (error) {
     console.error(error);
 
